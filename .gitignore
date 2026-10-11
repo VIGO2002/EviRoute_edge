@@ -1,0 +1,30 @@
+# Bytecode / local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
+# Private datasets, pretrained weights and experiment artifacts
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.onnx
+*.rknn
+*.npz
+*.npy
+*.tar.gz
+*.zip
+datasets/
+features/
+checkpoints/
+logs/
+wandb/
+runs/
+*.log
+.env
+# Local caches; intentional small JSON and summarized CSV results remain tracked.
