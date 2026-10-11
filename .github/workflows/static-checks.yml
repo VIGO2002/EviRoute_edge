@@ -1,0 +1,19 @@
+name: Source structure and integrity
+on:
+  push:
+  pull_request:
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile historical and showcase Python sources
+        run: python -m compileall -q distillation evaluation export models scripts tests tools
+      - name: Standard-library showcase tests
+        run: python -m unittest discover -s tests -p 'test_repository_layout.py' -v
+      - name: Check original source hashes and file sizes
+        run: python tools/verify_source_manifest.py

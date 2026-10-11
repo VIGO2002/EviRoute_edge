@@ -1,0 +1,15 @@
+# Install the matching PyTorch/CUDA build for your GPU environment separately.
+# Base research dependencies; not a historically locked FGTS environment.
+torch
+torchvision
+timm
+numpy
+pandas
+scikit-learn
+Pillow
+scipy
+opencv-python
+matplotlib
+tqdm
+onnx
+onnxruntime
