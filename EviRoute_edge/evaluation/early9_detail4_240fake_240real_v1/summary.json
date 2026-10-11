@@ -1,0 +1,1607 @@
+{
+  "status": "completed",
+  "purpose": "Class-aligned high support vs exact-ring lowest support low-level characterization",
+  "mode": "EXPLORATORY Eval8000 (same repeatedly inspected test images); NOT pixel-level artifact localization accuracy",
+  "n_unique_images": 480,
+  "n_fake": 240,
+  "n_real_unique": 240,
+  "definition": {
+    "detail4": [
+      "lap_var",
+      "grad_energy",
+      "residual_abs",
+      "color_var"
+    ],
+    "legacy5": [
+      "lap_var",
+      "grad_energy",
+      "residual_abs",
+      "fft_hf_ratio",
+      "color_var"
+    ],
+    "original_source": "legacy_analyze_lowlevel_red_blue_v2.py",
+    "percentile": "exact original within-image np.argsort rank / 195; each metric computed from RGB resized 224x224",
+    "red_fake": "frozen strict-pair own Top10 highest fake-support patch scores",
+    "red_real": "10 lowest fake-support patch scores, i.e. highest -fake-score (real-aligned) patches",
+    "blue": "lowest class-aligned score patches disjoint from red with identical B1/B2-only/interior counts",
+    "contrast": "mean percentile(rank(high/red))-mean percentile(rank(low/blue)); negative=red smoother/lower-detail",
+    "caveat": "Original v2 script computes 5-metric composite including FFT; Detail4 is an explicitly separate 4-metric projection"
+  },
+  "provenance": {
+    "paired_npz_sha256": "5bc635bd70b4f8d47ca82bed686639a36857272079bbc769467d3fa8c773d9da",
+    "faith_summary_sha256": "cfccdbf9fa2d9a8e752233eb2d0c3ab05af330101db36ace8d04c8afd31b3019",
+    "legacy_metric_source_sha256": "27503499458f5b37fa5475be307f7f783b53a09af43a268f51a9eefd473f1181",
+    "loader_sha256": "c04f805b1315b04bd81aa5c199eea3e9435a3a7bf88da0dbd2329aa12ac2c07f",
+    "checkpoints": {
+      "R_BCE": "3258e32522147a5bb434315e2cb4070f5e348dac65f44b26521f41d94933ebe2",
+      "R_Debias": "ddfe015a113d137843427a2f547216b7ee1d84eb3cae28717269b4789e1c0a90"
+    },
+    "manifest_sha256": "4d3f05aed0a8d94b4bfe79ddc10e1fc34636e2f18df19f58ba6566b8d5c81a3e"
+  },
+  "extraction_audits": {
+    "R_BCE": {
+      "fake": {
+        "n": 240,
+        "max_abs_logit_error": 4.76837158203125e-07,
+        "mean_abs_logit_error": 3.6011139551798503e-09,
+        "top10_set_exact_match": true,
+        "top10_set_match_count": 240,
+        "top10_rank_order_changed_count": 0,
+        "top1_index_changed_count": 0,
+        "top10_rank_order_changed_global_indices": [],
+        "top10_membership_changed_global_indices": [],
+        "allowed_near_tie_count": 0,
+        "allowed_near_tie_details": [],
+        "max_near_ties_argument": 2,
+        "max_boundary_score_gap_argument": 0.0005,
+        "selection_used_for_perturbation": "frozen strict-pair Top10 indices"
+      },
+      "real": {
+        "n": 240,
+        "max_abs_logit_error": 0.0,
+        "top1_match_count": 240,
+        "fake_score_top10_set_match_count": 240
+      }
+    },
+    "R_Debias": {
+      "fake": {
+        "n": 240,
+        "max_abs_logit_error": 8.940696716308594e-08,
+        "mean_abs_logit_error": 3.7252902984619143e-10,
+        "top10_set_exact_match": true,
+        "top10_set_match_count": 240,
+        "top10_rank_order_changed_count": 0,
+        "top1_index_changed_count": 0,
+        "top10_rank_order_changed_global_indices": [],
+        "top10_membership_changed_global_indices": [],
+        "allowed_near_tie_count": 0,
+        "allowed_near_tie_details": [],
+        "max_near_ties_argument": 2,
+        "max_boundary_score_gap_argument": 0.0005,
+        "selection_used_for_perturbation": "frozen strict-pair Top10 indices"
+      },
+      "real": {
+        "n": 240,
+        "max_abs_logit_error": 0.0,
+        "top1_match_count": 240,
+        "fake_score_top10_set_match_count": 240
+      }
+    }
+  },
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 20261910,
+    "method": "same-image paired within-source; fixed generator sources; real images sampled uniquely once"
+  },
+  "groups": {
+    "fake_all8": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 240,
+          "mean": 0.036758547008547006,
+          "median": 0.03512820512820512,
+          "negative_rate": 0.4375,
+          "positive_rate": 0.5625
+        },
+        "legacy5_percentile_delta": {
+          "n": 240,
+          "mean": 0.051447435897435896,
+          "median": 0.05230769230769228,
+          "negative_rate": 0.3958333333333333,
+          "positive_rate": 0.6041666666666666
+        },
+        "lap_var_percentile_delta": {
+          "n": 240,
+          "mean": 0.054523504273504275,
+          "median": 0.06051282051282042,
+          "negative_rate": 0.4125,
+          "positive_rate": 0.5875
+        },
+        "grad_energy_percentile_delta": {
+          "n": 240,
+          "mean": 0.034002136752136765,
+          "median": 0.03769230769230769,
+          "negative_rate": 0.45416666666666666,
+          "positive_rate": 0.5458333333333333
+        },
+        "residual_abs_percentile_delta": {
+          "n": 240,
+          "mean": 0.04085470085470086,
+          "median": 0.03205128205128202,
+          "negative_rate": 0.42916666666666664,
+          "positive_rate": 0.5708333333333333
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 240,
+          "mean": 0.11020299145299145,
+          "median": 0.11743589743589739,
+          "negative_rate": 0.2875,
+          "positive_rate": 0.7125
+        },
+        "color_var_percentile_delta": {
+          "n": 240,
+          "mean": 0.017653846153846152,
+          "median": 0.02051282051282055,
+          "negative_rate": 0.475,
+          "positive_rate": 0.525
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 240,
+          "mean": -0.017464209401709407,
+          "median": -0.02641025641025639,
+          "negative_rate": 0.5458333333333333,
+          "positive_rate": 0.45416666666666666
+        },
+        "legacy5_percentile_delta": {
+          "n": 240,
+          "mean": 0.012617094017094009,
+          "median": -0.0039487179487179,
+          "negative_rate": 0.5083333333333333,
+          "positive_rate": 0.49166666666666664
+        },
+        "lap_var_percentile_delta": {
+          "n": 240,
+          "mean": 0.005938034188034188,
+          "median": -0.0035897435897436214,
+          "negative_rate": 0.5041666666666667,
+          "positive_rate": 0.49583333333333335
+        },
+        "grad_energy_percentile_delta": {
+          "n": 240,
+          "mean": -0.02521581196581197,
+          "median": -0.035384615384615375,
+          "negative_rate": 0.5416666666666666,
+          "positive_rate": 0.4583333333333333
+        },
+        "residual_abs_percentile_delta": {
+          "n": 240,
+          "mean": -0.007559829059829063,
+          "median": -0.014102564102564052,
+          "negative_rate": 0.5375,
+          "positive_rate": 0.4625
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 240,
+          "mean": 0.1329423076923077,
+          "median": 0.1361538461538461,
+          "negative_rate": 0.25416666666666665,
+          "positive_rate": 0.7458333333333333
+        },
+        "color_var_percentile_delta": {
+          "n": 240,
+          "mean": -0.04301923076923078,
+          "median": -0.035384615384615375,
+          "negative_rate": 0.5833333333333334,
+          "positive_rate": 0.4166666666666667
+        }
+      },
+      "paired_ci95": {
+        "detail4_percentile_delta": {
+          "R_BCE": {
+            "point": 0.036758547008547006,
+            "ci95_low": 0.006338648504273514,
+            "ci95_high": 0.06978581730769226
+          },
+          "R_Debias": {
+            "point": -0.017464209401709403,
+            "ci95_low": -0.0467757077991453,
+            "ci95_high": 0.013452457264957246
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.05422275641025641,
+            "ci95_low": -0.06626558493589743,
+            "ci95_high": -0.042609735576923075
+          }
+        },
+        "legacy5_percentile_delta": {
+          "R_BCE": {
+            "point": 0.0514474358974359,
+            "ci95_low": 0.026253472222222223,
+            "ci95_high": 0.07691417735042735
+          },
+          "R_Debias": {
+            "point": 0.01261709401709401,
+            "ci95_low": -0.011644604700854702,
+            "ci95_high": 0.03665559829059824
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.038830341880341894,
+            "ci95_low": -0.04844558760683761,
+            "ci95_high": -0.029227660256410257
+          }
+        },
+        "lap_var_percentile_delta": {
+          "R_BCE": {
+            "point": 0.054523504273504275,
+            "ci95_low": 0.020258066239316225,
+            "ci95_high": 0.08768205128205127
+          },
+          "R_Debias": {
+            "point": 0.005938034188034187,
+            "ci95_low": -0.026673023504273512,
+            "ci95_high": 0.03724401709401709
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.04858547008547009,
+            "ci95_low": -0.06172110042735042,
+            "ci95_high": -0.035448611111111104
+          }
+        },
+        "grad_energy_percentile_delta": {
+          "R_BCE": {
+            "point": 0.03400213675213676,
+            "ci95_low": 0.00010422008547008868,
+            "ci95_high": 0.06539935897435886
+          },
+          "R_Debias": {
+            "point": -0.025215811965811973,
+            "ci95_low": -0.05807569444444446,
+            "ci95_high": 0.006205769230769226
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.059217948717948735,
+            "ci95_low": -0.0722923076923077,
+            "ci95_high": -0.04761527777777776
+          }
+        },
+        "residual_abs_percentile_delta": {
+          "R_BCE": {
+            "point": 0.04085470085470085,
+            "ci95_low": 0.006915491452991445,
+            "ci95_high": 0.07379903846153837
+          },
+          "R_Debias": {
+            "point": -0.007559829059829062,
+            "ci95_low": -0.0402752670940171,
+            "ci95_high": 0.025872061965811953
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.048414529914529915,
+            "ci95_low": -0.06161121794871796,
+            "ci95_high": -0.03576495726495728
+          }
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "R_BCE": {
+            "point": 0.11020299145299145,
+            "ci95_low": 0.08349417735042736,
+            "ci95_high": 0.13437029914529908
+          },
+          "R_Debias": {
+            "point": 0.1329423076923077,
+            "ci95_low": 0.10458044871794872,
+            "ci95_high": 0.15779369658119657
+          },
+          "delta_Debias_minus_BCE": {
+            "point": 0.022739316239316243,
+            "ci95_low": 0.01222601495726496,
+            "ci95_high": 0.03405811965811967
+          }
+        },
+        "color_var_percentile_delta": {
+          "R_BCE": {
+            "point": 0.017653846153846152,
+            "ci95_low": -0.012528792735042748,
+            "ci95_high": 0.04905801282051279
+          },
+          "R_Debias": {
+            "point": -0.04301923076923078,
+            "ci95_low": -0.07163739316239318,
+            "ci95_high": -0.012717467948717991
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.060673076923076934,
+            "ci95_low": -0.07307104700854701,
+            "ci95_high": -0.04863830128205129
+          }
+        }
+      }
+    },
+    "fake_unseen7": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 210,
+          "mean": 0.04704639804639805,
+          "median": 0.03871794871794873,
+          "negative_rate": 0.42857142857142855,
+          "positive_rate": 0.5714285714285714
+        },
+        "legacy5_percentile_delta": {
+          "n": 210,
+          "mean": 0.05710818070818071,
+          "median": 0.05584615384615381,
+          "negative_rate": 0.38095238095238093,
+          "positive_rate": 0.6190476190476191
+        },
+        "lap_var_percentile_delta": {
+          "n": 210,
+          "mean": 0.06168009768009767,
+          "median": 0.06512820512820505,
+          "negative_rate": 0.40476190476190477,
+          "positive_rate": 0.5952380952380952
+        },
+        "grad_energy_percentile_delta": {
+          "n": 210,
+          "mean": 0.04455433455433456,
+          "median": 0.03871794871794873,
+          "negative_rate": 0.44761904761904764,
+          "positive_rate": 0.5523809523809524
+        },
+        "residual_abs_percentile_delta": {
+          "n": 210,
+          "mean": 0.04831257631257631,
+          "median": 0.03487179487179484,
+          "negative_rate": 0.4238095238095238,
+          "positive_rate": 0.5761904761904761
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 210,
+          "mean": 0.09735531135531134,
+          "median": 0.09820512820512822,
+          "negative_rate": 0.319047619047619,
+          "positive_rate": 0.680952380952381
+        },
+        "color_var_percentile_delta": {
+          "n": 210,
+          "mean": 0.03363858363858363,
+          "median": 0.040256410256410136,
+          "negative_rate": 0.4523809523809524,
+          "positive_rate": 0.5476190476190477
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 210,
+          "mean": -0.011077533577533582,
+          "median": -0.02641025641025639,
+          "negative_rate": 0.5428571428571428,
+          "positive_rate": 0.45714285714285713
+        },
+        "legacy5_percentile_delta": {
+          "n": 210,
+          "mean": 0.014494749694749691,
+          "median": -0.002358974358974336,
+          "negative_rate": 0.5047619047619047,
+          "positive_rate": 0.49523809523809526
+        },
+        "lap_var_percentile_delta": {
+          "n": 210,
+          "mean": 0.008866910866910866,
+          "median": -0.0035897435897436214,
+          "negative_rate": 0.5047619047619047,
+          "positive_rate": 0.49523809523809526
+        },
+        "grad_energy_percentile_delta": {
+          "n": 210,
+          "mean": -0.018444444444444454,
+          "median": -0.0346153846153846,
+          "negative_rate": 0.5380952380952381,
+          "positive_rate": 0.46190476190476193
+        },
+        "residual_abs_percentile_delta": {
+          "n": 210,
+          "mean": -0.005418803418803436,
+          "median": -0.025897435897435955,
+          "negative_rate": 0.5380952380952381,
+          "positive_rate": 0.46190476190476193
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 210,
+          "mean": 0.11678388278388278,
+          "median": 0.12282051282051284,
+          "negative_rate": 0.2857142857142857,
+          "positive_rate": 0.7142857142857143
+        },
+        "color_var_percentile_delta": {
+          "n": 210,
+          "mean": -0.029313797313797307,
+          "median": -0.03051282051282056,
+          "negative_rate": 0.5666666666666667,
+          "positive_rate": 0.43333333333333335
+        }
+      },
+      "paired_ci95": {
+        "detail4_percentile_delta": {
+          "R_BCE": {
+            "point": 0.047046398046398034,
+            "ci95_low": 0.0146104242979243,
+            "ci95_high": 0.07851228632478631
+          },
+          "R_Debias": {
+            "point": -0.011077533577533586,
+            "ci95_low": -0.04278063186813187,
+            "ci95_high": 0.020170100732600723
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.05812393162393162,
+            "ci95_low": -0.07057197802197802,
+            "ci95_high": -0.04552548840048843
+          }
+        },
+        "legacy5_percentile_delta": {
+          "R_BCE": {
+            "point": 0.0571081807081807,
+            "ci95_low": 0.031270598290598285,
+            "ci95_high": 0.08463835164835164
+          },
+          "R_Debias": {
+            "point": 0.01449474969474969,
+            "ci95_low": -0.01126052503052504,
+            "ci95_high": 0.04091251526251525
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.042613431013431013,
+            "ci95_low": -0.053559731379731385,
+            "ci95_high": -0.031709304029304046
+          }
+        },
+        "lap_var_percentile_delta": {
+          "R_BCE": {
+            "point": 0.06168009768009769,
+            "ci95_low": 0.026662820512820505,
+            "ci95_high": 0.09827936507936506
+          },
+          "R_Debias": {
+            "point": 0.008866910866910863,
+            "ci95_low": -0.02319566544566545,
+            "ci95_high": 0.04544603174603172
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.05281318681318683,
+            "ci95_low": -0.06682185592185591,
+            "ci95_high": -0.038428266178266154
+          }
+        },
+        "grad_energy_percentile_delta": {
+          "R_BCE": {
+            "point": 0.04455433455433455,
+            "ci95_low": 0.010954761904761912,
+            "ci95_high": 0.07873962148962149
+          },
+          "R_Debias": {
+            "point": -0.018444444444444454,
+            "ci95_low": -0.05095586080586083,
+            "ci95_high": 0.014825763125763086
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.06299877899877901,
+            "ci95_low": -0.07627838827838827,
+            "ci95_high": -0.05006098901098902
+          }
+        },
+        "residual_abs_percentile_delta": {
+          "R_BCE": {
+            "point": 0.0483125763125763,
+            "ci95_low": 0.012174664224664223,
+            "ci95_high": 0.08291910866910865
+          },
+          "R_Debias": {
+            "point": -0.005418803418803423,
+            "ci95_low": -0.04005915750915753,
+            "ci95_high": 0.029171611721611684
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.05373137973137972,
+            "ci95_low": -0.06771440781440782,
+            "ci95_high": -0.040776862026862044
+          }
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "R_BCE": {
+            "point": 0.09735531135531136,
+            "ci95_low": 0.06925036630036628,
+            "ci95_high": 0.12658247863247862
+          },
+          "R_Debias": {
+            "point": 0.11678388278388277,
+            "ci95_low": 0.087647557997558,
+            "ci95_high": 0.14617319902319897
+          },
+          "delta_Debias_minus_BCE": {
+            "point": 0.019428571428571406,
+            "ci95_low": 0.007517338217338222,
+            "ci95_high": 0.031219536019536028
+          }
+        },
+        "color_var_percentile_delta": {
+          "R_BCE": {
+            "point": 0.03363858363858364,
+            "ci95_low": -0.000376739926739926,
+            "ci95_high": 0.06887667887667887
+          },
+          "R_Debias": {
+            "point": -0.02931379731379732,
+            "ci95_low": -0.062008974358974345,
+            "ci95_high": 0.004368131868131856
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.06295238095238095,
+            "ci95_low": -0.07669194139194141,
+            "ci95_high": -0.04984316239316239
+          }
+        }
+      }
+    },
+    "real_unique": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 240,
+          "mean": -0.06773076923076922,
+          "median": -0.053333333333333316,
+          "negative_rate": 0.5958333333333333,
+          "positive_rate": 0.4041666666666667
+        },
+        "legacy5_percentile_delta": {
+          "n": 240,
+          "mean": -0.053135470085470086,
+          "median": -0.04148717948717942,
+          "negative_rate": 0.5875,
+          "positive_rate": 0.4125
+        },
+        "lap_var_percentile_delta": {
+          "n": 240,
+          "mean": -0.060970085470085485,
+          "median": -0.05615384615384619,
+          "negative_rate": 0.5666666666666667,
+          "positive_rate": 0.43333333333333335
+        },
+        "grad_energy_percentile_delta": {
+          "n": 240,
+          "mean": -0.07433119658119659,
+          "median": -0.07358974358974368,
+          "negative_rate": 0.6125,
+          "positive_rate": 0.3875
+        },
+        "residual_abs_percentile_delta": {
+          "n": 240,
+          "mean": -0.0544017094017094,
+          "median": -0.03692307692307689,
+          "negative_rate": 0.5791666666666667,
+          "positive_rate": 0.4166666666666667
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 240,
+          "mean": 0.005245726495726493,
+          "median": 0.014871794871794852,
+          "negative_rate": 0.4708333333333333,
+          "positive_rate": 0.5291666666666667
+        },
+        "color_var_percentile_delta": {
+          "n": 240,
+          "mean": -0.08122008547008548,
+          "median": -0.09128205128205133,
+          "negative_rate": 0.6333333333333333,
+          "positive_rate": 0.36666666666666664
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 240,
+          "mean": -0.0198616452991453,
+          "median": -0.019230769230769176,
+          "negative_rate": 0.5291666666666667,
+          "positive_rate": 0.4708333333333333
+        },
+        "legacy5_percentile_delta": {
+          "n": 240,
+          "mean": -0.02306581196581197,
+          "median": -0.016102564102564096,
+          "negative_rate": 0.5166666666666667,
+          "positive_rate": 0.48333333333333334
+        },
+        "lap_var_percentile_delta": {
+          "n": 240,
+          "mean": -0.02494871794871795,
+          "median": -0.0184615384615385,
+          "negative_rate": 0.5208333333333334,
+          "positive_rate": 0.4791666666666667
+        },
+        "grad_energy_percentile_delta": {
+          "n": 240,
+          "mean": -0.019784188034188036,
+          "median": -0.010000000000000009,
+          "negative_rate": 0.5083333333333333,
+          "positive_rate": 0.49166666666666664
+        },
+        "residual_abs_percentile_delta": {
+          "n": 240,
+          "mean": -0.01429273504273504,
+          "median": -0.005384615384615377,
+          "negative_rate": 0.5083333333333333,
+          "positive_rate": 0.49166666666666664
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 240,
+          "mean": -0.03588247863247864,
+          "median": -0.01948717948717954,
+          "negative_rate": 0.5583333333333333,
+          "positive_rate": 0.44166666666666665
+        },
+        "color_var_percentile_delta": {
+          "n": 240,
+          "mean": -0.020420940170940163,
+          "median": -0.007692307692307665,
+          "negative_rate": 0.5333333333333333,
+          "positive_rate": 0.4666666666666667
+        }
+      },
+      "paired_ci95": {
+        "detail4_percentile_delta": {
+          "R_BCE": {
+            "point": -0.06773076923076922,
+            "ci95_low": -0.09607787126068378,
+            "ci95_high": -0.03887791132478635
+          },
+          "R_Debias": {
+            "point": -0.0198616452991453,
+            "ci95_low": -0.0472619391025641,
+            "ci95_high": 0.007349879807692294
+          },
+          "delta_Debias_minus_BCE": {
+            "point": 0.047869123931623916,
+            "ci95_low": 0.0333681356837607,
+            "ci95_high": 0.061144911858974346
+          }
+        },
+        "legacy5_percentile_delta": {
+          "R_BCE": {
+            "point": -0.053135470085470086,
+            "ci95_low": -0.0769517841880342,
+            "ci95_high": -0.029617692307692376
+          },
+          "R_Debias": {
+            "point": -0.02306581196581197,
+            "ci95_low": -0.04480352564102563,
+            "ci95_high": -0.002020587606837614
+          },
+          "delta_Debias_minus_BCE": {
+            "point": 0.030069658119658116,
+            "ci95_low": 0.018537585470085476,
+            "ci95_high": 0.040375395299145266
+          }
+        },
+        "lap_var_percentile_delta": {
+          "R_BCE": {
+            "point": -0.060970085470085485,
+            "ci95_low": -0.09052051282051284,
+            "ci95_high": -0.029725641025641035
+          },
+          "R_Debias": {
+            "point": -0.02494871794871795,
+            "ci95_low": -0.05299748931623932,
+            "ci95_high": 0.0040841880341880195
+          },
+          "delta_Debias_minus_BCE": {
+            "point": 0.03602136752136753,
+            "ci95_low": 0.02185918803418804,
+            "ci95_high": 0.05018819444444445
+          }
+        },
+        "grad_energy_percentile_delta": {
+          "R_BCE": {
+            "point": -0.07433119658119659,
+            "ci95_low": -0.10306645299145302,
+            "ci95_high": -0.0447221153846154
+          },
+          "R_Debias": {
+            "point": -0.019784188034188036,
+            "ci95_low": -0.04593798076923077,
+            "ci95_high": 0.008533547008546983
+          },
+          "delta_Debias_minus_BCE": {
+            "point": 0.05454700854700856,
+            "ci95_low": 0.04134577991452992,
+            "ci95_high": 0.06879107905982905
+          }
+        },
+        "residual_abs_percentile_delta": {
+          "R_BCE": {
+            "point": -0.0544017094017094,
+            "ci95_low": -0.0851732905982906,
+            "ci95_high": -0.024183493589743605
+          },
+          "R_Debias": {
+            "point": -0.01429273504273504,
+            "ci95_low": -0.04379567307692308,
+            "ci95_high": 0.014560897435897422
+          },
+          "delta_Debias_minus_BCE": {
+            "point": 0.04010897435897436,
+            "ci95_low": 0.024696581196581205,
+            "ci95_high": 0.054374946581196584
+          }
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "R_BCE": {
+            "point": 0.005245726495726493,
+            "ci95_low": -0.022519391025641017,
+            "ci95_high": 0.032723878205128176
+          },
+          "R_Debias": {
+            "point": -0.03588247863247864,
+            "ci95_low": -0.06346912393162395,
+            "ci95_high": -0.007908760683760719
+          },
+          "delta_Debias_minus_BCE": {
+            "point": -0.041128205128205135,
+            "ci95_low": -0.05495154914529914,
+            "ci95_high": -0.02772430555555556
+          }
+        },
+        "color_var_percentile_delta": {
+          "R_BCE": {
+            "point": -0.08122008547008548,
+            "ci95_low": -0.10915865384615386,
+            "ci95_high": -0.052362927350427364
+          },
+          "R_Debias": {
+            "point": -0.020420940170940163,
+            "ci95_low": -0.047145299145299135,
+            "ci95_high": 0.0075215277777777615
+          },
+          "delta_Debias_minus_BCE": {
+            "point": 0.06079914529914532,
+            "ci95_low": 0.04754994658119661,
+            "ci95_high": 0.07427895299145297
+          }
+        }
+      }
+    }
+  },
+  "per_source_fake": {
+    "ADM": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": 0.10158119658119659,
+          "median": 0.12294871794871794,
+          "negative_rate": 0.26666666666666666,
+          "positive_rate": 0.7333333333333333
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.09129230769230769,
+          "median": 0.13666666666666666,
+          "negative_rate": 0.23333333333333334,
+          "positive_rate": 0.7666666666666667
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.10005128205128205,
+          "median": 0.142051282051282,
+          "negative_rate": 0.26666666666666666,
+          "positive_rate": 0.7333333333333333
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": 0.10054700854700856,
+          "median": 0.11512820512820507,
+          "negative_rate": 0.23333333333333334,
+          "positive_rate": 0.7666666666666667
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": 0.08808547008547007,
+          "median": 0.08666666666666667,
+          "negative_rate": 0.3,
+          "positive_rate": 0.7
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.05013675213675213,
+          "median": 0.13179487179487176,
+          "negative_rate": 0.36666666666666664,
+          "positive_rate": 0.6333333333333333
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.11764102564102565,
+          "median": 0.14923076923076925,
+          "negative_rate": 0.16666666666666666,
+          "positive_rate": 0.8333333333333334
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": 0.04114957264957265,
+          "median": 0.02499999999999998,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.05227008547008547,
+          "median": 0.06394871794871793,
+          "negative_rate": 0.3333333333333333,
+          "positive_rate": 0.6666666666666666
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.05700854700854701,
+          "median": 0.07051282051282062,
+          "negative_rate": 0.36666666666666664,
+          "positive_rate": 0.6333333333333333
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": 0.03258119658119659,
+          "median": 0.005384615384615377,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": 0.03299145299145298,
+          "median": 0.024615384615384595,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.09675213675213676,
+          "median": 0.10666666666666674,
+          "negative_rate": 0.3,
+          "positive_rate": 0.7
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.042017094017094005,
+          "median": 0.05128205128205121,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        }
+      }
+    },
+    "BigGAN": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": 0.06663247863247862,
+          "median": 0.04583333333333332,
+          "negative_rate": 0.4,
+          "positive_rate": 0.6
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.06275213675213673,
+          "median": 0.05410256410256406,
+          "negative_rate": 0.3333333333333333,
+          "positive_rate": 0.6666666666666666
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.07054700854700856,
+          "median": 0.06102564102564098,
+          "negative_rate": 0.36666666666666664,
+          "positive_rate": 0.6333333333333333
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": 0.07042735042735043,
+          "median": 0.0341025641025641,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": 0.06105982905982905,
+          "median": 0.04205128205128203,
+          "negative_rate": 0.3333333333333333,
+          "positive_rate": 0.6666666666666666
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.04723076923076921,
+          "median": 0.054102564102564005,
+          "negative_rate": 0.3333333333333333,
+          "positive_rate": 0.6666666666666666
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.0644957264957265,
+          "median": 0.003589743589743538,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": 0.01273504273504274,
+          "median": 0.006666666666666682,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.02527179487179488,
+          "median": 0.01717948717948719,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.019162393162393158,
+          "median": 0.0292307692307692,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": 0.013846153846153841,
+          "median": 0.002051282051281994,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": 0.008512820512820535,
+          "median": 0.008461538461538465,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.07541880341880344,
+          "median": 0.1125641025641026,
+          "negative_rate": 0.3,
+          "positive_rate": 0.7
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.009418803418803445,
+          "median": -0.05358974358974353,
+          "negative_rate": 0.6333333333333333,
+          "positive_rate": 0.36666666666666664
+        }
+      }
+    },
+    "Midjourney": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": 0.11973504273504272,
+          "median": 0.04416666666666666,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.11816068376068374,
+          "median": 0.05323076923076921,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.13126495726495727,
+          "median": 0.05256410256410249,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": 0.12656410256410258,
+          "median": 0.05358974358974358,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": 0.12803418803418806,
+          "median": 0.02333333333333329,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.11186324786324787,
+          "median": 0.08974358974358967,
+          "negative_rate": 0.3333333333333333,
+          "positive_rate": 0.6666666666666666
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.09307692307692304,
+          "median": 0.0502564102564102,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": 0.07846581196581195,
+          "median": 0.0311538461538462,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.08276923076923076,
+          "median": 0.029743589743589722,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.08439316239316239,
+          "median": 0.025128205128205128,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": 0.08283760683760681,
+          "median": 0.03999999999999998,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": 0.08641025641025643,
+          "median": 0.02743589743589747,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.09998290598290596,
+          "median": 0.12051282051282053,
+          "negative_rate": 0.36666666666666664,
+          "positive_rate": 0.6333333333333333
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.060222222222222184,
+          "median": 0.0387179487179487,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        }
+      }
+    },
+    "VQDM": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": 0.1267435897435897,
+          "median": 0.125,
+          "negative_rate": 0.3,
+          "positive_rate": 0.7
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.112208547008547,
+          "median": 0.09056410256410255,
+          "negative_rate": 0.26666666666666666,
+          "positive_rate": 0.7333333333333333
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.13615384615384618,
+          "median": 0.1705128205128205,
+          "negative_rate": 0.3333333333333333,
+          "positive_rate": 0.6666666666666666
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": 0.13223931623931623,
+          "median": 0.15205128205128204,
+          "negative_rate": 0.3,
+          "positive_rate": 0.7
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": 0.1286153846153846,
+          "median": 0.15358974358974356,
+          "negative_rate": 0.3333333333333333,
+          "positive_rate": 0.6666666666666666
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.05406837606837608,
+          "median": 0.07923076923076927,
+          "negative_rate": 0.3333333333333333,
+          "positive_rate": 0.6666666666666666
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.10996581196581195,
+          "median": 0.10948717948717948,
+          "negative_rate": 0.3333333333333333,
+          "positive_rate": 0.6666666666666666
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": 0.0455042735042735,
+          "median": 0.06730769230769235,
+          "negative_rate": 0.4,
+          "positive_rate": 0.6
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.055866666666666655,
+          "median": 0.04646153846153847,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.05982905982905981,
+          "median": 0.04153846153846158,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": 0.04702564102564102,
+          "median": 0.05461538461538468,
+          "negative_rate": 0.4,
+          "positive_rate": 0.6
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": 0.055675213675213664,
+          "median": 0.05897435897435904,
+          "negative_rate": 0.4,
+          "positive_rate": 0.6
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.0973162393162393,
+          "median": 0.11974358974358976,
+          "negative_rate": 0.3,
+          "positive_rate": 0.7
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.019487179487179488,
+          "median": 0.02282051282051284,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        }
+      }
+    },
+    "GLIDE": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": -0.022615384615384603,
+          "median": -0.019999999999999997,
+          "negative_rate": 0.5333333333333333,
+          "positive_rate": 0.4666666666666667
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": -0.004338461538461536,
+          "median": 0.015743589743589755,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.0263931623931624,
+          "median": 0.0064102564102563875,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": -0.018735042735042725,
+          "median": -0.020256410256410146,
+          "negative_rate": 0.5333333333333333,
+          "positive_rate": 0.4666666666666667
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": -0.04150427350427351,
+          "median": -0.032051282051282076,
+          "negative_rate": 0.5333333333333333,
+          "positive_rate": 0.4666666666666667
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.06876923076923074,
+          "median": 0.06153846153846154,
+          "negative_rate": 0.4,
+          "positive_rate": 0.6
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.0038290598290598404,
+          "median": -0.035897435897435825,
+          "negative_rate": 0.5666666666666667,
+          "positive_rate": 0.43333333333333335
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": -0.10958974358974362,
+          "median": -0.10775641025641026,
+          "negative_rate": 0.7,
+          "positive_rate": 0.3
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": -0.07574358974358976,
+          "median": -0.06379487179487178,
+          "negative_rate": 0.7,
+          "positive_rate": 0.3
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.11545299145299145,
+          "median": -0.10051282051282054,
+          "negative_rate": 0.7,
+          "positive_rate": 0.3
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": -0.10740170940170943,
+          "median": -0.0958974358974359,
+          "negative_rate": 0.6666666666666666,
+          "positive_rate": 0.3333333333333333
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": -0.13104273504273506,
+          "median": -0.13153846153846155,
+          "negative_rate": 0.7333333333333333,
+          "positive_rate": 0.26666666666666666
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.05964102564102564,
+          "median": 0.08205128205128204,
+          "negative_rate": 0.4,
+          "positive_rate": 0.6
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.08446153846153846,
+          "median": -0.12307692307692306,
+          "negative_rate": 0.6,
+          "positive_rate": 0.4
+        }
+      }
+    },
+    "SD1.4": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": -0.03525641025641025,
+          "median": -0.022307692307692313,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.011822222222222229,
+          "median": 0.020666666666666694,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.004427350427350422,
+          "median": 0.03128205128205125,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": -0.039863247863247867,
+          "median": -0.015641025641025763,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": -0.011350427350427345,
+          "median": 0.016923076923077013,
+          "negative_rate": 0.4666666666666667,
+          "positive_rate": 0.5333333333333333
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.20013675213675214,
+          "median": 0.1628205128205128,
+          "negative_rate": 0.06666666666666667,
+          "positive_rate": 0.9333333333333333
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.09423931623931624,
+          "median": -0.08230769230769219,
+          "negative_rate": 0.6333333333333333,
+          "positive_rate": 0.36666666666666664
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": -0.06217094017094016,
+          "median": -0.0323076923076923,
+          "negative_rate": 0.5666666666666667,
+          "positive_rate": 0.43333333333333335
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": -0.0005264957264957284,
+          "median": -0.005538461538461487,
+          "negative_rate": 0.5333333333333333,
+          "positive_rate": 0.4666666666666667
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.014564102564102545,
+          "median": -0.010000000000000037,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": -0.0726153846153846,
+          "median": -0.05769230769230774,
+          "negative_rate": 0.5666666666666667,
+          "positive_rate": 0.43333333333333335
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": -0.02254700854700854,
+          "median": -0.009487179487179448,
+          "negative_rate": 0.5333333333333333,
+          "positive_rate": 0.4666666666666667
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.24605128205128204,
+          "median": 0.2748717948717949,
+          "negative_rate": 0.03333333333333333,
+          "positive_rate": 0.9666666666666667
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.138957264957265,
+          "median": -0.09717948717948727,
+          "negative_rate": 0.7,
+          "positive_rate": 0.3
+        }
+      }
+    },
+    "SD1.5": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": -0.06356837606837606,
+          "median": -0.051346153846153854,
+          "negative_rate": 0.6,
+          "positive_rate": 0.4
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": -0.024167521367521365,
+          "median": -0.0381025641025641,
+          "negative_rate": 0.5666666666666667,
+          "positive_rate": 0.43333333333333335
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.04157264957264957,
+          "median": -0.047948717948717995,
+          "negative_rate": 0.5666666666666667,
+          "positive_rate": 0.43333333333333335
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": -0.07220512820512819,
+          "median": -0.06820512820512814,
+          "negative_rate": 0.6333333333333333,
+          "positive_rate": 0.36666666666666664
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": -0.05617094017094019,
+          "median": -0.075897435897436,
+          "negative_rate": 0.6,
+          "positive_rate": 0.4
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.13343589743589745,
+          "median": 0.16025641025641021,
+          "negative_rate": 0.3,
+          "positive_rate": 0.7
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.08432478632478632,
+          "median": -0.08384615384615385,
+          "negative_rate": 0.5666666666666667,
+          "positive_rate": 0.43333333333333335
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": -0.09897008547008547,
+          "median": -0.10237179487179487,
+          "negative_rate": 0.7,
+          "positive_rate": 0.3
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": -0.04661880341880342,
+          "median": -0.07256410256410256,
+          "negative_rate": 0.6666666666666666,
+          "positive_rate": 0.3333333333333333
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.06282051282051283,
+          "median": -0.10641025641025639,
+          "negative_rate": 0.6,
+          "positive_rate": 0.4
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": -0.12155555555555556,
+          "median": -0.1884615384615385,
+          "negative_rate": 0.6666666666666666,
+          "positive_rate": 0.3333333333333333
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": -0.07868376068376072,
+          "median": -0.12025641025641032,
+          "negative_rate": 0.6666666666666666,
+          "positive_rate": 0.3333333333333333
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.16278632478632477,
+          "median": 0.19615384615384618,
+          "negative_rate": 0.2,
+          "positive_rate": 0.8
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.13282051282051283,
+          "median": -0.19282051282051282,
+          "negative_rate": 0.6,
+          "positive_rate": 0.4
+        }
+      }
+    },
+    "Wukong": {
+      "R_BCE": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": 0.0008162393162393149,
+          "median": 0.017756410256410275,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.04384957264957267,
+          "median": 0.015794871794871858,
+          "negative_rate": 0.36666666666666664,
+          "positive_rate": 0.6333333333333333
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.061709401709401694,
+          "median": 0.06692307692307681,
+          "negative_rate": 0.4,
+          "positive_rate": 0.6
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": -0.026957264957264956,
+          "median": -0.009487179487179503,
+          "negative_rate": 0.5666666666666667,
+          "positive_rate": 0.43333333333333335
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": 0.03006837606837609,
+          "median": 0.040769230769230835,
+          "negative_rate": 0.43333333333333335,
+          "positive_rate": 0.5666666666666667
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.21598290598290598,
+          "median": 0.20564102564102565,
+          "negative_rate": 0.16666666666666666,
+          "positive_rate": 0.8333333333333334
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.06155555555555554,
+          "median": -0.03692307692307678,
+          "negative_rate": 0.6,
+          "positive_rate": 0.4
+        }
+      },
+      "R_Debias": {
+        "detail4_percentile_delta": {
+          "n": 30,
+          "mean": -0.04683760683760684,
+          "median": -0.052756410256410195,
+          "negative_rate": 0.6,
+          "positive_rate": 0.4
+        },
+        "legacy5_percentile_delta": {
+          "n": 30,
+          "mean": 0.007647863247863248,
+          "median": -0.003384615384615314,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "lap_var_percentile_delta": {
+          "n": 30,
+          "mean": 0.019948717948717953,
+          "median": 0.0023076923076922884,
+          "negative_rate": 0.5,
+          "positive_rate": 0.5
+        },
+        "grad_energy_percentile_delta": {
+          "n": 30,
+          "mean": -0.07644444444444445,
+          "median": -0.072051282051282,
+          "negative_rate": 0.6,
+          "positive_rate": 0.4
+        },
+        "residual_abs_percentile_delta": {
+          "n": 30,
+          "mean": -0.0117948717948718,
+          "median": -0.0346153846153846,
+          "negative_rate": 0.5333333333333333,
+          "positive_rate": 0.4666666666666667
+        },
+        "fft_hf_ratio_percentile_delta": {
+          "n": 30,
+          "mean": 0.22558974358974365,
+          "median": 0.17153846153846147,
+          "negative_rate": 0.13333333333333333,
+          "positive_rate": 0.8666666666666667
+        },
+        "color_var_percentile_delta": {
+          "n": 30,
+          "mean": -0.11905982905982908,
+          "median": -0.07461538461538467,
+          "negative_rate": 0.7333333333333333,
+          "positive_rate": 0.26666666666666666
+        }
+      }
+    }
+  }
+}

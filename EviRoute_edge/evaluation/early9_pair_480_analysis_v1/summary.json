@@ -1,0 +1,621 @@
+{
+  "status": "completed",
+  "protocol": "SAME 480 previously inspected Detail4 images, 30 unique Real+30 Fake per source; shared real uniquely partitioned across domains",
+  "caution": [
+    "EXPLORATORY Eval8000; not an independent final holdout.",
+    "Balanced-60 AUCs use an artificial non-overlapping 30-real partition per source; shared-real-270 AUC uses 240 unique real samples reused ANALYTICALLY and bootstraps them jointly; neither equals the original Eval8000 500-real/500-fake protocol.",
+    "Device numerical agreement does NOT prove board causal faithfulness; check perturbations separately if claimed.",
+    "All metrics are based on these specific two fixed checkpoints, 480 images and this RKNN runtime/hardware."
+  ],
+  "provenance": {
+    "references_sha256": "e6478ac23c60881157d94f4e629062e12ef5549dde5ed246b9bbeddd9885eab2",
+    "inputs_sha256": "d5c926e6fbbee39f450dcd9c4e84fbbcbe5646fed6a71f5d33e9d06158716365",
+    "board_outputs": {
+      "R_BCE": {
+        "board_sha256": "48379e1b69d731db7671b7dfb1ac0c11b9307093261b2948b24f5b83668f9f55",
+        "model_sha256": "808cecbf53a60d3071d622a32792f7cce782a22115c97b2ead9d7cbda75cf597"
+      },
+      "R_Debias": {
+        "board_sha256": "857a00eae168034080748554df163fad1b17ca36f3136142dd3e4b7ea540ba8d",
+        "model_sha256": "40db8e07ef6fe537c913d19bdbbb0fe01ec0c1f3a1fba14d1e86a6ae6e4a251c"
+      }
+    },
+    "detail4_cache_sha256": "245ce6260c12042f781d253ec942d6f1df0cd1e8de14828f712c708d45ae791e"
+  },
+  "arms": {
+    "R_BCE": {
+      "pooled_480": {
+        "n": 480,
+        "n_real": 240,
+        "n_fake": 240,
+        "auc_pytorch": 0.8691840277777777,
+        "auc_board": 0.8678993055555557,
+        "auc_delta_board_minus_pytorch": -0.001284722222221979,
+        "ap_pytorch": 0.8909523858695203,
+        "ap_board": 0.8902392200238439,
+        "acc_pytorch_at_zero": 0.75,
+        "acc_board_at_zero": 0.7604166666666666
+      },
+      "per_source_balanced_60": {
+        "ADM": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.5711111111111111,
+          "auc_board": 0.5666666666666667,
+          "auc_delta_board_minus_pytorch": -0.004444444444444473,
+          "ap_pytorch": 0.5500022251902816,
+          "ap_board": 0.5458966484809393,
+          "acc_pytorch_at_zero": 0.5166666666666667,
+          "acc_board_at_zero": 0.5166666666666667
+        },
+        "BigGAN": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.8822222222222222,
+          "auc_board": 0.88,
+          "auc_delta_board_minus_pytorch": -0.0022222222222222365,
+          "ap_pytorch": 0.8784058422744405,
+          "ap_board": 0.8811448810134792,
+          "acc_pytorch_at_zero": 0.65,
+          "acc_board_at_zero": 0.65
+        },
+        "Midjourney": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.9155555555555556,
+          "auc_board": 0.9255555555555557,
+          "auc_delta_board_minus_pytorch": 0.01000000000000012,
+          "ap_pytorch": 0.9179345868960511,
+          "ap_board": 0.9313147737777593,
+          "acc_pytorch_at_zero": 0.7333333333333333,
+          "acc_board_at_zero": 0.7666666666666667
+        },
+        "VQDM": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.8133333333333334,
+          "auc_board": 0.8155555555555555,
+          "auc_delta_board_minus_pytorch": 0.0022222222222221255,
+          "ap_pytorch": 0.819675009833731,
+          "ap_board": 0.8174282369378353,
+          "acc_pytorch_at_zero": 0.65,
+          "acc_board_at_zero": 0.6666666666666666
+        },
+        "GLIDE": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.8755555555555555,
+          "auc_board": 0.8733333333333333,
+          "auc_delta_board_minus_pytorch": -0.0022222222222222365,
+          "ap_pytorch": 0.8524890211292924,
+          "ap_board": 0.8506809220544971,
+          "acc_pytorch_at_zero": 0.6,
+          "acc_board_at_zero": 0.6166666666666667
+        },
+        "SD1.4": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.9944444444444445,
+          "auc_board": 0.9944444444444445,
+          "auc_delta_board_minus_pytorch": 0.0,
+          "ap_pytorch": 0.9942391506926175,
+          "ap_board": 0.9942391506926175,
+          "acc_pytorch_at_zero": 0.9666666666666667,
+          "acc_board_at_zero": 0.9666666666666667
+        },
+        "SD1.5": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.9966666666666667,
+          "auc_board": 0.9966666666666667,
+          "auc_delta_board_minus_pytorch": 0.0,
+          "ap_pytorch": 0.9966641947843282,
+          "ap_board": 0.9966641947843282,
+          "acc_pytorch_at_zero": 0.9833333333333333,
+          "acc_board_at_zero": 0.9833333333333333
+        },
+        "Wukong": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.9933333333333334,
+          "auc_board": 0.9933333333333334,
+          "auc_delta_board_minus_pytorch": 0.0,
+          "ap_pytorch": 0.9932310861764884,
+          "ap_board": 0.9932310861764884,
+          "acc_pytorch_at_zero": 0.9,
+          "acc_board_at_zero": 0.9166666666666666
+        }
+      },
+      "per_source_shared_real_270": {
+        "ADM": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.5452777777777778,
+          "auc_board": 0.5463888888888889,
+          "auc_delta_board_minus_pytorch": 0.0011111111111111738,
+          "ap_pytorch": 0.1261227615482452,
+          "ap_board": 0.12886140762979287,
+          "acc_pytorch_at_zero": 0.8703703703703703,
+          "acc_board_at_zero": 0.8703703703703703
+        },
+        "BigGAN": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.8899999999999999,
+          "auc_board": 0.8834722222222222,
+          "auc_delta_board_minus_pytorch": -0.006527777777777688,
+          "ap_pytorch": 0.5403471843895632,
+          "ap_board": 0.5341917288684437,
+          "acc_pytorch_at_zero": 0.9,
+          "acc_board_at_zero": 0.9
+        },
+        "Midjourney": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.9155555555555555,
+          "auc_board": 0.9165277777777778,
+          "auc_delta_board_minus_pytorch": 0.0009722222222223742,
+          "ap_pytorch": 0.6763766417151832,
+          "ap_board": 0.6876746648280049,
+          "acc_pytorch_at_zero": 0.9222222222222223,
+          "acc_board_at_zero": 0.9296296296296296
+        },
+        "VQDM": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.7831944444444444,
+          "auc_board": 0.7820833333333332,
+          "auc_delta_board_minus_pytorch": -0.0011111111111111738,
+          "ap_pytorch": 0.442801323137747,
+          "ap_board": 0.4388239535083871,
+          "acc_pytorch_at_zero": 0.9037037037037037,
+          "acc_board_at_zero": 0.9074074074074074
+        },
+        "GLIDE": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.8313888888888888,
+          "auc_board": 0.8254166666666667,
+          "auc_delta_board_minus_pytorch": -0.005972222222222157,
+          "ap_pytorch": 0.3647990429961781,
+          "ap_board": 0.3630606655166866,
+          "acc_pytorch_at_zero": 0.8888888888888888,
+          "acc_board_at_zero": 0.8925925925925926
+        },
+        "SD1.4": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.9990277777777778,
+          "auc_board": 0.9988888888888889,
+          "auc_delta_board_minus_pytorch": -0.0001388888888889106,
+          "ap_pytorch": 0.992191659653191,
+          "ap_board": 0.9912446899562213,
+          "acc_pytorch_at_zero": 0.9777777777777777,
+          "acc_board_at_zero": 0.9777777777777777
+        },
+        "SD1.5": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.9981944444444444,
+          "auc_board": 0.99875,
+          "auc_delta_board_minus_pytorch": 0.0005555555555556424,
+          "ap_pytorch": 0.986183777642111,
+          "ap_board": 0.9904319985569985,
+          "acc_pytorch_at_zero": 0.9777777777777777,
+          "acc_board_at_zero": 0.9777777777777777
+        },
+        "Wukong": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.9908333333333333,
+          "auc_board": 0.9916666666666667,
+          "auc_delta_board_minus_pytorch": 0.0008333333333333526,
+          "ap_pytorch": 0.9367190767519917,
+          "ap_board": 0.9416302785592046,
+          "acc_pytorch_at_zero": 0.9592592592592593,
+          "acc_board_at_zero": 0.9629629629629629
+        }
+      },
+      "unseen7_macro_shared_real_270_auc_pytorch": 0.8506349206349206,
+      "unseen7_macro_shared_real_270_auc_board": 0.8491865079365079,
+      "unseen7_macro_shared_real_270_auc_delta_ci95": {
+        "point": -0.0014484126984126394,
+        "ci95_low": -0.004306547619047626,
+        "ci95_high": 0.0015084325396825058,
+        "bootstrap_n": 1000,
+        "seed": 20261011,
+        "method": "shared 240 Real resampled ONCE per draw for ALL domains, each 30 Fake resampled per source; within-image paired PT/NPU"
+      },
+      "unseen7_macro_auc_pytorch": 0.863968253968254,
+      "unseen7_macro_auc_board": 0.8644444444444446,
+      "unseen7_macro_auc_delta_board_minus_pytorch_ci95": {
+        "point": 0.0004761904761904713,
+        "ci95_low": -0.0030158730158730274,
+        "ci95_high": 0.00428571428571425,
+        "bootstrap_n": 1000,
+        "seed": 20261010,
+        "method": "paired by image, stratified within each fixed generator and label; generator set fixed"
+      },
+      "numerical": {
+        "min_cosine": 0.9950767727569678,
+        "mean_cosine": 0.9993917104611628,
+        "mean_mae": 0.3895605622563863,
+        "max_abs_error": 4.711469650268555,
+        "mean_top10_overlap": 9.33125,
+        "top10_overlap_hist": {
+          "7": 6,
+          "8": 41,
+          "9": 221,
+          "10": 212
+        },
+        "top10_exact_count": 212,
+        "prediction_agreement_count": 475,
+        "prediction_agreement_rate": 0.9895833333333334,
+        "max_abs_logit_error": 1.4833409070968626,
+        "mean_abs_logit_error": 0.2876284707857606,
+        "margin_within_1_count": 35,
+        "margin_within_1_prediction_flips": 5
+      },
+      "fake_spatial": {
+        "reference_top10_B1": 0.41083333333333333,
+        "board_top10_B1": 0.41083333333333333,
+        "reference_top10_B2_only": 0.16208333333333336,
+        "board_top10_B2_only": 0.16333333333333336
+      }
+    },
+    "R_Debias": {
+      "pooled_480": {
+        "n": 480,
+        "n_real": 240,
+        "n_fake": 240,
+        "auc_pytorch": 0.8646527777777777,
+        "auc_board": 0.8637673611111112,
+        "auc_delta_board_minus_pytorch": -0.0008854166666665275,
+        "ap_pytorch": 0.8875799747703743,
+        "ap_board": 0.8873139528294312,
+        "acc_pytorch_at_zero": 0.7625,
+        "acc_board_at_zero": 0.76875
+      },
+      "per_source_balanced_60": {
+        "ADM": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.5588888888888889,
+          "auc_board": 0.5644444444444444,
+          "auc_delta_board_minus_pytorch": 0.005555555555555536,
+          "ap_pytorch": 0.5395898674862182,
+          "ap_board": 0.5429577874992132,
+          "acc_pytorch_at_zero": 0.5,
+          "acc_board_at_zero": 0.5166666666666667
+        },
+        "BigGAN": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.8799999999999999,
+          "auc_board": 0.8777777777777778,
+          "auc_delta_board_minus_pytorch": -0.0022222222222221255,
+          "ap_pytorch": 0.8774999645252124,
+          "ap_board": 0.8793504785560333,
+          "acc_pytorch_at_zero": 0.6833333333333333,
+          "acc_board_at_zero": 0.6833333333333333
+        },
+        "Midjourney": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.9155555555555557,
+          "auc_board": 0.9177777777777778,
+          "auc_delta_board_minus_pytorch": 0.0022222222222221255,
+          "ap_pytorch": 0.9173637358545725,
+          "ap_board": 0.9203273493950366,
+          "acc_pytorch_at_zero": 0.7333333333333333,
+          "acc_board_at_zero": 0.7666666666666667
+        },
+        "VQDM": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.808888888888889,
+          "auc_board": 0.8111111111111111,
+          "auc_delta_board_minus_pytorch": 0.0022222222222221255,
+          "ap_pytorch": 0.8084453514721074,
+          "ap_board": 0.8096253959501079,
+          "acc_pytorch_at_zero": 0.6833333333333333,
+          "acc_board_at_zero": 0.6833333333333333
+        },
+        "GLIDE": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.8566666666666667,
+          "auc_board": 0.8555555555555555,
+          "auc_delta_board_minus_pytorch": -0.0011111111111111738,
+          "ap_pytorch": 0.8392275124709784,
+          "ap_board": 0.8376154025043651,
+          "acc_pytorch_at_zero": 0.6,
+          "acc_board_at_zero": 0.6
+        },
+        "SD1.4": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.9944444444444445,
+          "auc_board": 0.9955555555555555,
+          "auc_delta_board_minus_pytorch": 0.0011111111111110628,
+          "ap_pytorch": 0.9942391506926175,
+          "ap_board": 0.995473718593852,
+          "acc_pytorch_at_zero": 0.95,
+          "acc_board_at_zero": 0.95
+        },
+        "SD1.5": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.9966666666666667,
+          "auc_board": 0.9955555555555555,
+          "auc_delta_board_minus_pytorch": -0.0011111111111111738,
+          "ap_pytorch": 0.9966641947843282,
+          "ap_board": 0.995473718593852,
+          "acc_pytorch_at_zero": 0.9833333333333333,
+          "acc_board_at_zero": 0.9833333333333333
+        },
+        "Wukong": {
+          "n": 60,
+          "n_real": 30,
+          "n_fake": 30,
+          "auc_pytorch": 0.9966666666666667,
+          "auc_board": 0.9966666666666667,
+          "auc_delta_board_minus_pytorch": 0.0,
+          "ap_pytorch": 0.9966641947843282,
+          "ap_board": 0.9966641947843282,
+          "acc_pytorch_at_zero": 0.9666666666666667,
+          "acc_board_at_zero": 0.9666666666666667
+        }
+      },
+      "per_source_shared_real_270": {
+        "ADM": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.5340277777777778,
+          "auc_board": 0.5391666666666667,
+          "auc_delta_board_minus_pytorch": 0.005138888888888915,
+          "ap_pytorch": 0.11914993723384715,
+          "ap_board": 0.12268954948875085,
+          "acc_pytorch_at_zero": 0.8481481481481481,
+          "acc_board_at_zero": 0.8481481481481481
+        },
+        "BigGAN": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.8881944444444445,
+          "auc_board": 0.8829166666666667,
+          "auc_delta_board_minus_pytorch": -0.005277777777777826,
+          "ap_pytorch": 0.5393462071989437,
+          "ap_board": 0.5316889000755994,
+          "acc_pytorch_at_zero": 0.8888888888888888,
+          "acc_board_at_zero": 0.8888888888888888
+        },
+        "Midjourney": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.905,
+          "auc_board": 0.90375,
+          "auc_delta_board_minus_pytorch": -0.0012499999999999734,
+          "ap_pytorch": 0.6600454357694776,
+          "ap_board": 0.6670349413848603,
+          "acc_pytorch_at_zero": 0.9037037037037037,
+          "acc_board_at_zero": 0.9074074074074074
+        },
+        "VQDM": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.7831944444444444,
+          "auc_board": 0.7794444444444445,
+          "auc_delta_board_minus_pytorch": -0.00374999999999992,
+          "ap_pytorch": 0.43368531720793974,
+          "ap_board": 0.44258751831179666,
+          "acc_pytorch_at_zero": 0.8888888888888888,
+          "acc_board_at_zero": 0.8851851851851852
+        },
+        "GLIDE": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.8202777777777778,
+          "auc_board": 0.8179166666666667,
+          "auc_delta_board_minus_pytorch": -0.002361111111111036,
+          "ap_pytorch": 0.34554456806903117,
+          "ap_board": 0.3548487096502488,
+          "acc_pytorch_at_zero": 0.8740740740740741,
+          "acc_board_at_zero": 0.8703703703703703
+        },
+        "SD1.4": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.9984722222222223,
+          "auc_board": 0.9986111111111111,
+          "auc_delta_board_minus_pytorch": 0.00013888888888879958,
+          "ap_pytorch": 0.9881938464263732,
+          "ap_board": 0.9894284143276079,
+          "acc_pytorch_at_zero": 0.9555555555555556,
+          "acc_board_at_zero": 0.9518518518518518
+        },
+        "SD1.5": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.9972222222222222,
+          "auc_board": 0.9969444444444445,
+          "auc_delta_board_minus_pytorch": -0.0002777777777777102,
+          "ap_pytorch": 0.9809425560500828,
+          "ap_board": 0.9790160240055835,
+          "acc_pytorch_at_zero": 0.9555555555555556,
+          "acc_board_at_zero": 0.9518518518518518
+        },
+        "Wukong": {
+          "n": 270,
+          "n_real": 240,
+          "n_fake": 30,
+          "auc_pytorch": 0.9908333333333333,
+          "auc_board": 0.9913888888888889,
+          "auc_delta_board_minus_pytorch": 0.0005555555555555314,
+          "ap_pytorch": 0.9341064629632474,
+          "ap_board": 0.9374797613768685,
+          "acc_pytorch_at_zero": 0.9518518518518518,
+          "acc_board_at_zero": 0.9481481481481482
+        }
+      },
+      "unseen7_macro_shared_real_270_auc_pytorch": 0.8455357142857143,
+      "unseen7_macro_shared_real_270_auc_board": 0.8445039682539682,
+      "unseen7_macro_shared_real_270_auc_delta_ci95": {
+        "point": -0.0010317460317460028,
+        "ci95_low": -0.003870039682539623,
+        "ci95_high": 0.0018055555555555368,
+        "bootstrap_n": 1000,
+        "seed": 20261011,
+        "method": "shared 240 Real resampled ONCE per draw for ALL domains, each 30 Fake resampled per source; within-image paired PT/NPU"
+      },
+      "unseen7_macro_auc_pytorch": 0.8590476190476191,
+      "unseen7_macro_auc_board": 0.8598412698412699,
+      "unseen7_macro_auc_delta_board_minus_pytorch_ci95": {
+        "point": 0.0007936507936507591,
+        "ci95_low": -0.0033333333333333158,
+        "ci95_high": 0.005083333333333307,
+        "bootstrap_n": 1000,
+        "seed": 20261010,
+        "method": "paired by image, stratified within each fixed generator and label; generator set fixed"
+      },
+      "numerical": {
+        "min_cosine": 0.9939256523250969,
+        "mean_cosine": 0.9992755837830797,
+        "mean_mae": 0.36684365755578247,
+        "max_abs_error": 4.3936614990234375,
+        "mean_top10_overlap": 9.329166666666667,
+        "top10_overlap_hist": {
+          "7": 5,
+          "8": 51,
+          "9": 205,
+          "10": 219
+        },
+        "top10_exact_count": 219,
+        "prediction_agreement_count": 475,
+        "prediction_agreement_rate": 0.9895833333333334,
+        "max_abs_logit_error": 1.4550705432891844,
+        "mean_abs_logit_error": 0.2703278163929159,
+        "margin_within_1_count": 25,
+        "margin_within_1_prediction_flips": 5
+      },
+      "fake_spatial": {
+        "reference_top10_B1": 0.3845833333333334,
+        "board_top10_B1": 0.38375,
+        "reference_top10_B2_only": 0.1941666666666667,
+        "board_top10_B2_only": 0.19291666666666665
+      }
+    }
+  },
+  "comparison": {
+    "ADM": {
+      "R_BCE": {
+        "auc_pytorch": 0.5711111111111111,
+        "auc_board": 0.5666666666666667
+      },
+      "R_Debias": {
+        "auc_pytorch": 0.5588888888888889,
+        "auc_board": 0.5644444444444444
+      }
+    },
+    "BigGAN": {
+      "R_BCE": {
+        "auc_pytorch": 0.8822222222222222,
+        "auc_board": 0.88
+      },
+      "R_Debias": {
+        "auc_pytorch": 0.8799999999999999,
+        "auc_board": 0.8777777777777778
+      }
+    },
+    "Midjourney": {
+      "R_BCE": {
+        "auc_pytorch": 0.9155555555555556,
+        "auc_board": 0.9255555555555557
+      },
+      "R_Debias": {
+        "auc_pytorch": 0.9155555555555557,
+        "auc_board": 0.9177777777777778
+      }
+    },
+    "VQDM": {
+      "R_BCE": {
+        "auc_pytorch": 0.8133333333333334,
+        "auc_board": 0.8155555555555555
+      },
+      "R_Debias": {
+        "auc_pytorch": 0.808888888888889,
+        "auc_board": 0.8111111111111111
+      }
+    },
+    "GLIDE": {
+      "R_BCE": {
+        "auc_pytorch": 0.8755555555555555,
+        "auc_board": 0.8733333333333333
+      },
+      "R_Debias": {
+        "auc_pytorch": 0.8566666666666667,
+        "auc_board": 0.8555555555555555
+      }
+    },
+    "SD1.4": {
+      "R_BCE": {
+        "auc_pytorch": 0.9944444444444445,
+        "auc_board": 0.9944444444444445
+      },
+      "R_Debias": {
+        "auc_pytorch": 0.9944444444444445,
+        "auc_board": 0.9955555555555555
+      }
+    },
+    "SD1.5": {
+      "R_BCE": {
+        "auc_pytorch": 0.9966666666666667,
+        "auc_board": 0.9966666666666667
+      },
+      "R_Debias": {
+        "auc_pytorch": 0.9966666666666667,
+        "auc_board": 0.9955555555555555
+      }
+    },
+    "Wukong": {
+      "R_BCE": {
+        "auc_pytorch": 0.9933333333333334,
+        "auc_board": 0.9933333333333334
+      },
+      "R_Debias": {
+        "auc_pytorch": 0.9966666666666667,
+        "auc_board": 0.9966666666666667
+      }
+    }
+  }
+}

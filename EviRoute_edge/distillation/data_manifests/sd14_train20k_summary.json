@@ -1,0 +1,14 @@
+{
+  "seed": 20261008,
+  "samples": 20000,
+  "class_counts": {
+    "1": 10000,
+    "0": 10000
+  },
+  "original_count": 2800,
+  "new_count": 17200,
+  "path_overlap_with_heldout": 0,
+  "byte_identical_duplicate_count": 0,
+  "content_hash": "SHA256",
+  "manifest": "/root/autodl-tmp/EviRoute_edge/distillation/data_manifests/sd14_train20k_seed20261008.csv"
+}

@@ -1,0 +1,85 @@
+{
+  "status": "simulator_pass",
+  "passed": true,
+  "arm": "R_BCE",
+  "source_checkpoint_sha256": "3258e32522147a5bb434315e2cb4070f5e348dac65f44b26521f41d94933ebe2",
+  "source_onnx_sha256": "4d073d7093196c3e73b02a1997a0ca27d7351c87fbaf2b084a6496e770be41f2",
+  "rk3588_model_sha256": "808cecbf53a60d3071d622a32792f7cce782a22115c97b2ead9d7cbda75cf597",
+  "rknn_model_path": "/root/autodl-tmp/EviRoute_edge/export/early9_pair_deployment_v1/R_BCE/rk3588_fp16/early9_r_bce_external_patchify_fp16.rknn",
+  "seconds": 27.484,
+  "toolkit_note": "RKNN Toolkit2 in AutoDL rknn232; target rk3588; do_quantization=False",
+  "simulator_cases": [
+    {
+      "cosine": 0.999999709894202,
+      "mae": 0.014332206881776149,
+      "max_abs": 0.04953575134277344,
+      "logit_error": 0.01024007797241211,
+      "top10_overlap": 10,
+      "prediction_match": true,
+      "case": 0
+    },
+    {
+      "cosine": 0.9999993324887886,
+      "mae": 0.015613186116121253,
+      "max_abs": 0.06965255737304688,
+      "logit_error": 0.008008432388305842,
+      "top10_overlap": 10,
+      "prediction_match": true,
+      "case": 1
+    },
+    {
+      "cosine": 0.9999996541956676,
+      "mae": 0.014391981825536611,
+      "max_abs": 0.05298423767089844,
+      "logit_error": 0.0040452003479014564,
+      "top10_overlap": 10,
+      "prediction_match": true,
+      "case": 2
+    },
+    {
+      "cosine": 0.9999997439180217,
+      "mae": 0.01192611820843755,
+      "max_abs": 0.06311225891113281,
+      "logit_error": 0.002720212936401012,
+      "top10_overlap": 10,
+      "prediction_match": true,
+      "case": 3
+    },
+    {
+      "cosine": 0.9999992763762819,
+      "mae": 0.01495407552135234,
+      "max_abs": 0.06451129913330078,
+      "logit_error": 0.0006992340087892401,
+      "top10_overlap": 10,
+      "prediction_match": true,
+      "case": 8
+    },
+    {
+      "cosine": 0.9999987632424372,
+      "mae": 0.017828406119833187,
+      "max_abs": 0.09401893615722656,
+      "logit_error": 0.011290645599364879,
+      "top10_overlap": 9,
+      "prediction_match": true,
+      "case": 9
+    },
+    {
+      "cosine": 0.999998940426007,
+      "mae": 0.012501423456230941,
+      "max_abs": 0.0467376708984375,
+      "logit_error": 0.004280519485473588,
+      "top10_overlap": 10,
+      "prediction_match": true,
+      "case": 10
+    },
+    {
+      "cosine": 0.9999967856827016,
+      "mae": 0.016005132119266356,
+      "max_abs": 0.1039276123046875,
+      "logit_error": 0.006316125392913818,
+      "top10_overlap": 10,
+      "prediction_match": true,
+      "case": 11
+    }
+  ]
+}

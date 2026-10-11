@@ -1,0 +1,70 @@
+{
+  "status": "completed",
+  "arm": "R-Debias",
+  "shared_init_sha256": "827afe346f57dafb455a343b700863c88334bf10094af72e2e8c263f9eeeb34c",
+  "shared_weight_sha256": "30d690703dee5a4e1a8028356c06a75cd7a763a8aa091ec4398ea73af687aac5",
+  "signature": {
+    "base_checkpoint_sha256": "abee7181e223ea7c51b30bb952bd660bbef5576b26008fe47f4e3de5938f400a",
+    "train_manifest_sha256": "064454dc8a8329b64cf815a3d438ead6ee34f26a33e6564469039c4965e0a551",
+    "train_split_ordered_sha256": "cee5a483f1fbca1998b7431673da38881faa652f6a71ed50a63d5f760ae93efa",
+    "val_split_ordered_sha256": "1879a6a985644a57a8ce36f40148d959be0a7b7d437b3cf1a7a37fedcdadc958",
+    "eval_manifest_sha256": "4d3f05aed0a8d94b4bfe79ddc10e1fc34636e2f18df19f58ba6566b8d5c81a3e",
+    "source_sha256": {
+      "train_early9_lora.py": "e31e0b7154d99efa4de2d1ca723b50940dd697e56590f627d21cda145f4dc9ba",
+      "train_early9_lora_data_v2.py": "e417dd8c6be9c792c8d802bbe1e9eb2c8678f43a175d56ebac663d843841760b"
+    },
+    "train_count": 20000,
+    "val_count": 600
+  },
+  "best_step": 2625,
+  "best_validation_index": 15,
+  "best_val_metrics": {
+    "auc": 0.9991555555555556,
+    "ap": 0.9991326512043656,
+    "acc": 0.9833333333333333,
+    "bce": 0.046953991055488586,
+    "fake_top1_b1": 0.41333333333333333,
+    "fake_top10_b1": 0.3923333333333333,
+    "fake_top1_b2": 0.5966666666666667,
+    "fake_top10_b2": 0.588,
+    "real_top1_b1": 0.31,
+    "real_top10_b1": 0.31566666666666665,
+    "real_top1_b2": 0.5166666666666667,
+    "real_top10_b2": 0.516
+  },
+  "final_step": 2625,
+  "final_val_metrics": {
+    "auc": 0.9991555555555556,
+    "ap": 0.9991326512043656,
+    "acc": 0.9833333333333333,
+    "bce": 0.046953991055488586,
+    "fake_top1_b1": 0.41333333333333333,
+    "fake_top10_b1": 0.3923333333333333,
+    "fake_top1_b2": 0.5966666666666667,
+    "fake_top10_b2": 0.588,
+    "real_top1_b1": 0.31,
+    "real_top10_b1": 0.31566666666666665,
+    "real_top1_b2": 0.5166666666666667,
+    "real_top10_b2": 0.516
+  },
+  "initial_val_metrics": {
+    "auc": 0.9788777777777778,
+    "ap": 0.9752654130032404,
+    "acc": 0.93,
+    "bce": 0.1897832602262497,
+    "fake_top1_b1": 0.29,
+    "fake_top10_b1": 0.30033333333333334,
+    "fake_top1_b2": 0.5,
+    "fake_top10_b2": 0.49966666666666665,
+    "real_top1_b1": 0.22,
+    "real_top10_b1": 0.22566666666666665,
+    "real_top1_b2": 0.45,
+    "real_top10_b2": 0.432
+  },
+  "val_checks": 15,
+  "head_dropout_train_steps": 450,
+  "head_dropout_eval_steps": 2175,
+  "training_mode_note": "Intentionally preserves original head eval-mode after validation",
+  "selection": "historical AUC, BCE tie-break",
+  "note": "No AIGIBench/GenImage metrics used for training or checkpoint selection"
+}
