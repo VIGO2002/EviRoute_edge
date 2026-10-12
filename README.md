@@ -1,126 +1,68 @@
-# EviRoute-Edge
-### Evidence-aware model adaptation and RK3588-oriented inference engineering
+# EviRoute-Edge | AutoDL to RK3588
 
-**Chenwei He (何晨炜)** · University of Electronic Science and Technology of China
+**Author: Chenwei He (何晨炜)** · University of Electronic Science and Technology of China
 
-EviRoute-Edge investigates how to retain **meaningful, less boundary-biased image evidence** while adapting a frozen vision model to a smaller, efficient inference path. It combines **DINOv3 ViT-B/16 Early-9**, selective **LoRA adaptation**, a **Top-K patch scorer**, and an experimentally controlled comparison between ordinary binary cross-entropy and EviRoute-inspired evidence debiasing.
+**EviRoute-Edge** integrates DINOv3 ViT-B Early-9 LoRA adaptation, evidence-debiased training, rigorous paired experiments, and RK3588-targeted FP16 inference. The repository is organized into two **independent deployment roots**:
 
-The repository documents the training, model comparison, numerical audits and ONNX/RKNN FP16 export workflows. The related [EviRoute research repository](https://github.com/VIGO2002/EviRoute) describes the original evidence-routing study on DINOv3-7B; **these are separate architectures and experiment protocols**.
-
-## Research-to-inference pipeline
-
-```text
-224×224 RGB image
-        │
-   DINOv3 ViT-B/16
-   Early-9 blocks (0–8)
-   LoRA: blocks 6–8, qkv/proj, r=8, α=8
-        │
-   Intermediate 14×14 patch features
-   196 tokens × 768 dimensions
-        │
-   Normalization + patch scorer
-   Linear(768,256) → GELU → Dropout → Linear(256,1)
-        │
-   196 evidence scores → Top-10 mean → fake logit
-        │
-        ├── R-BCE    : standard BCE objective
-        └── R-Debias : training-only region-aware score dropout
-                       + fake-only boundary evidence regularization
-        │
-   Frozen Step-2625 checkpoints
-        │
-   LoRA merge → External Patchify → ONNX → RKNN FP16
-        │
-   Per-image score, ranking and numerical alignment audits
-```
-
-The **debiased branch** masks scores before Top-K classification and penalizes outer-boundary evidence mass only for fake images. Inference uses **clean, unmasked scores**. The outermost patch ring B1 contains 52 of the 196 tokens; the second ring (B2-only) contains 44.
-
-## Where to read the implementation
-
-| Topic | Entry point | What it implements |
+| Environment | Source partition | Core capabilities |
 |---|---|---|
-| Evidence debiasing | [`distillation/early9_p0_matched_pair_core.py`](distillation/early9_p0_matched_pair_core.py) | Ring masks, score dropout, fake-only edge penalty, BCE/debias branch losses |
-| Strict matched-pair training | [`distillation/train_early9_p0_matched_pair.py`](distillation/train_early9_p0_matched_pair.py) | Shared initialization, source/checkpoint SHA guards, 2,625-step controlled comparison |
-| DINOv3 Early-9 LoRA | [`distillation/train_early9_lora.py`](distillation/train_early9_lora.py) | Backbone construction, LoRA, patch scoring and original training protocol |
-| Cross-generator evaluation | [`evaluation/eval_early9_matched_pair_genimage.py`](evaluation/eval_early9_matched_pair_genimage.py) | Fixed-checkpoint GenImage comparisons |
-| Evidence faithfulness | [`evaluation/early9_faithfulness_v1_2/run_early9_rgb_faithfulness.py`](evaluation/early9_faithfulness_v1_2/run_early9_rgb_faithfulness.py) | Original-image perturbation against ring-matched random controls |
-| Export and numerical audit | [`export/early9_pair_deployment_v1/export_pair.py`](export/early9_pair_deployment_v1/export_pair.py) | Frozen-checkpoint recovery, LoRA merge, external patchification and ONNX checks |
-| RKNN FP16 build | [`export/early9_pair_deployment_v1/convert_pair_fp16.py`](export/early9_pair_deployment_v1/convert_pair_fp16.py) | RKNN-Toolkit2 model conversion and simulator validation |
-| Comparison tools | [`scripts/early9_pair_480_tools_v1/`](scripts/early9_pair_480_tools_v1/) | Fixed-image packaging, numerical output comparison and source-wise analysis |
+| **AutoDL / GPU / RKNN-Toolkit2** | [`server/`](server/) | 20K matched R-BCE vs R-Debias training, source/generalization evaluations, LoRA merge, ONNX export, RKNN FP16 conversion |
+| **RK3588 / aarch64 / RKNNLite2** | [`rk3588/`](rk3588/) | Serial original-image inference, three-stage asynchronous pipeline, offline Web UI, evidence visualization, per-image audits |
 
-## Experiment snapshot
-
-The **strict matched-pair** experiment uses **20,000 SD1.4 training images**, **600 source-validation images**, identical initial weights, and **2,625 updates** per arm. Both reported runs finish at step 2625. The training recipes share data order, optimizer and validation protocol; the intentional difference is the debiasing loss and stochastic token masking.
-
-| Internal validation (600 images) | R-BCE | R-Debias | Difference |
-|---|---:|---:|---:|
-| AUC | 99.9633% | 99.9156% | −0.0478 pp |
-| Fake Top-1 outer-ring B1 occupancy | 48.67% | 41.33% | **−7.33 pp** |
-| Fake Top-10 outer-ring B1 occupancy | 43.23% | 39.23% | **−4.00 pp** |
-
-**Exploratory cross-generator evaluation:** GenImage Eval8000 uses 8 generator groupings; the `unseen7` macro excludes training generator **SD1.4**.
-
-| GenImage unseen-7 macro | R-BCE | R-Debias | Difference |
-|---|---:|---:|---:|
-| AUC | 85.62% | 85.17% | −0.45 pp |
-| Fake Top-1 B1 occupancy | 41.94% | 38.97% | **−2.97 pp** |
-| Fake Top-10 B1 occupancy | 39.17% | 37.56% | **−1.61 pp** |
-
-These numbers are transcribed from the committed experiment summaries, not the results of a new run. **Eval8000 has already been inspected in previous experiments and is not a fresh independent blind test.** Its 8,000 logical rows reuse 500 real images across generator groups; it contains 4,500 unique images. Edge occupancy measures **where** selected evidence lies; it is not by itself an artifact localization or causal-faithfulness score. See [result interpretation](docs/RESULTS.md).
-
-## Export workflow
-
-The comparison preserves two distinct fixed-step checkpoints and source SHA identities. The deployment-oriented export path first audits LoRA merge and CPU external patchification, then builds a fixed-input ONNX model and uses **RKNN-Toolkit2 2.3.2** to produce an **RK3588-targeted FP16 RKNN** model (`do_quantization=False`).
-
-The external patchify interface packs normalized RGB into `[1, 768, 1, 196]`, retaining the original 14×14 patch semantics. The included converter records source checkpoint, ONNX and RKNN SHA256 identities and per-sample numerical comparisons.
-
-The committed conversion reports for **R-BCE** and **R-Debias** both record `simulator_pass`. This is a specific conversion/simulator finding, **not** an estimate of end-to-end image-processing latency. [Export protocol](export/early9_pair_deployment_v1/README.md).
-
-## Repository structure
+## End-to-end architecture
 
 ```text
-EviRoute_edge/
-├── distillation/    # Early-9 LoRA training and strict matched-pair experiments
-├── evaluation/      # Generator transfer, perturbation and evidence diagnostics
-├── export/          # LoRA merge, ONNX export, RKNN-Toolkit2 conversion
-├── models/          # Patch-score inference modules
-├── scripts/         # Benchmark preparation, numerical audits and utilities
-├── tests/           # Algorithm/protocol tests and repository integrity checks
-├── docs/            # Experiment interpretation, configuration, source manifest
-├── tools/           # Source-integrity verification
-├── requirements.txt
-└── README.md
+ AutoDL server                              RK3588 development board
+ DINOv3 ViT-B Early-9                      Original JPEG/PNG images
+ LoRA blocks 6–8, r=8                      RGB decode → CPU external patchify
+ 196 patch tokens, Top-10 MIL                    ↓
+   ├─ R-BCE                                 RKNN FP16 NPU inference
+   └─ R-Debias                              196 patch scores → Top-10
+          ↓                                       ↓
+  Paired evaluation & evidence audits       Fake/real score + evidence overlay
+          ↓                                       ↓
+  LoRA merge → ONNX → RKNN  ──────────────►  Serial or async inference
+                                                   ↓
+                                           Offline browser UI + reports
 ```
 
-## Reproducing the source protocol
+The R-Debias training objective applies region-aware patch-score dropout and a fake-only outer-boundary evidence penalty. Inference always uses clean patch scores.
 
-The scripts intentionally preserve the author's original paths and frozen SHA guards under `/root/autodl-tmp/EviRoute_edge`. Install a compatible PyTorch/CUDA stack and use the project's **FGTS** environment for its original training/evaluation workflows.
+## Inspect the actual implementation
 
-```bash
-# From the original AutoDL project root:
-cd /root/autodl-tmp/EviRoute_edge
+| Focus | Source |
+|---|---|
+| Region-aware score masking and fake-only penalty | [`server/distillation/early9_p0_matched_pair_core.py`](server/distillation/early9_p0_matched_pair_core.py) |
+| Controlled, same-initialization 20K training | [`server/distillation/train_early9_p0_matched_pair.py`](server/distillation/train_early9_p0_matched_pair.py) |
+| Model export and LoRA merge | [`server/export/early9_pair_deployment_v1/export_pair.py`](server/export/early9_pair_deployment_v1/export_pair.py) |
+| RKNN FP16 model conversion and simulation | [`server/export/early9_pair_deployment_v1/convert_pair_fp16.py`](server/export/early9_pair_deployment_v1/convert_pair_fp16.py) |
+| **RK3588 serial inference** | [`rk3588/scripts/early9_full_pipeline_v1/run_images.py`](rk3588/scripts/early9_full_pipeline_v1/run_images.py) |
+| **Bounded, three-stage asynchronous inference** | [`rk3588/scripts/early9_async_pipeline_v1/run_async.py`](rk3588/scripts/early9_async_pipeline_v1/run_async.py) |
+| **Local offline inference service** | [`rk3588/scripts/eviroute_edge_ui_v1/server.py`](rk3588/scripts/eviroute_edge_ui_v1/server.py) |
+| Browser front end | [`rk3588/scripts/eviroute_edge_ui_v1/static/`](rk3588/scripts/eviroute_edge_ui_v1/static/) |
 
-# Verify that published text artifacts are unchanged after reorganization:
-python tools/verify_source_manifest.py
+## Original local paths and setup
 
-# CPU algorithm tests (PyTorch required):
-python -m unittest discover -s tests -p 'test_early9_p0_matched_pair.py' -v
+**Important:** The `server/` and `rk3588/` folders are **GitHub source partitions**, not new filesystem roots for the deployed code. Copy their **contents** separately to their historical project roots:
 
-# Inspect CLI without starting a model training run:
-python distillation/train_early9_p0_matched_pair.py --help
+| | Server | Board |
+|---|---|---|
+| Original project root | `/root/autodl-tmp/EviRoute_edge/` | `/root/EviRoute_RK3588/` |
+| Dependencies | PyTorch, timm, CUDA, RKNN-Toolkit2 | RKNNLite2, NumPy, Pillow; Chromium for kiosk |
+| Additional assets | DINOv3 weights, checkpoints, data manifests, image caches | Matching two `.rknn` binaries, RKNN runtime/driver |
 
-# Paired-training protocol and prerequisites:
-# docs/MATCHED_PAIR_20K.md
-```
+The device's asynchronous inference script **imports functions from the serial pipeline at runtime**; keep `early9_async_pipeline_v1/` and `early9_full_pipeline_v1/` as siblings.
 
-The original run depends on separately stored pretrained DINOv3 weights, historical checkpoints, image manifests, input images and score caches. These are intentionally excluded from the source repository. Do **not** bypass file-identity checks or present a structural/source-integrity test as a full training reproduction.
+The offline UI defaults to loopback address `127.0.0.1:8765`. Do not publicly expose the service without access control.
 
-A complete protocol map, environment notes and measurement caveats are provided under [`docs/`](docs/).
+See [installation and verification](docs/ENVIRONMENTS.md), [server research](server/README.md), and [board implementation](rk3588/README.md).
 
-## Authorship and attribution
+## Experimental evidence and limitations
 
-**Chenwei He (何晨炜):** EviRoute-Edge research adaptation, controlled experiments, source implementation and numerical/export pipeline.
+The original matched-pair run used **20,000 SD1.4 training samples**, 600 held-out source-validation samples and 2,625 updates. Recorded validation fake Top-1 B1 occupancy fell **48.67% → 41.33%** (R-BCE → R-Debias); AUC was **99.96% → 99.92%**. In the **previously explored**, non-blind GenImage unseen-seven comparison, B1 Top-1 occupancy changed **41.94% → 38.97%** with Macro-AUC **85.62% → 85.17%**. These are historical logs, not re-measurements after restructuring; see [original server-side results](server/docs/RESULTS.md).
 
-The project relies on third-party pretrained DINOv3 models, PyTorch, `timm`, RKNN-Toolkit2 and other scientific packages, each subject to its own distribution and license terms. See [third-party notices](THIRD_PARTY_NOTICES.md).
+The uploaded board documentation reports approximately **10.6 images/s** under its 160-image, three-round asynchronous protocol with saved evidence outputs and around **1.51×** serial throughput. This is **historical throughput**, not new board testing, per-image latency or measured power.
+
+**Source only:** Pretrained weights, large datasets, ONNX/RKNN binaries and private runtime jobs are not redistributed. Static integrity checks verify preserved source identity, not end-to-end deployability or numerical reproduction.
+
+**Research and engineering implementation: Chenwei He (何晨炜).** Third-party DINOv3, PyTorch, timm and Rockchip components keep their original license terms; see [notices](THIRD_PARTY_NOTICES.md).
