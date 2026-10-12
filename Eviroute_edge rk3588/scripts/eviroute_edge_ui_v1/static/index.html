@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>EviRoute Edge · 离线图像核验</title>
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">E<span>·</span></div>
+        <div><div class="brand-title">EviRoute <strong>EDGE</strong></div><div class="brand-sub">本地 AI 图像真实性核验终端</div></div>
+      </div>
+      <div class="top-right"><span class="device-status" id="device-status">● 正在检查设备</span><span class="mode-badge">离线运行</span><span class="clock" id="clock">--:--</span></div>
+    </header>
+    <div class="bodygrid">
+      <aside class="sidebar">
+        <nav class="nav">
+          <button class="nav-item active" data-tab="detect"><span class="nav-ico">◎</span> 检测</button>
+          <button class="nav-item" data-tab="history"><span class="nav-ico">▤</span> 历史记录</button>
+          <button class="nav-item" data-tab="about"><span class="nav-ico">▦</span> 关于设备</button>
+        </nav>
+        <div class="sidebar-content">
+          <div class="section-label">检测模型</div>
+          <div class="segmented" role="group" aria-label="选择检测模型">
+            <button id="model-bce" class="selected" data-model="R_BCE">R-BCE</button>
+            <button id="model-debias" data-model="R_Debias">R-Debias</button>
+          </div>
+          <p class="small-copy">R-BCE 默认；R-Debias 为证据去偏对照。选择后对整个任务生效。</p>
+          <div class="separator"></div>
+          <div class="section-label">图片来源</div>
+          <label class="dropzone" id="dropzone" for="file-input">
+            <span class="drop-icon">⇧</span>
+            <strong>导入图片</strong>
+            <span>点击选择 U 盘 / 本地文件</span>
+            <span class="formats">JPG · PNG · WebP　支持批量</span>
+          </label>
+          <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple id="file-input" hidden>
+          <div class="file-count" id="file-count">当前未选择图片</div>
+          <div class="file-list" id="file-list" aria-live="polite"></div>
+          <button class="primary" id="start-button" disabled>开始本地检测 <span>→</span></button>
+          <div class="progress-wrap" id="progress-wrap" hidden>
+            <div class="progress-line"><span id="progress-label">准备中…</span><span id="progress-number"></span></div>
+            <div class="progress-track"><div id="progress-fill"></div></div>
+          </div>
+        </div>
+        <div class="sidebar-bottom"><span class="dot"></span> RK3588 · Core 0_1_2 <div>所有推理在本机运行，不需要互联网</div></div>
+      </aside>
+      <main class="main">
+        <section id="tab-detect" class="screen active">
+          <div class="main-title-row"><div><div class="eyebrow">LOCAL INFERENCE</div><h1>真实性检测</h1><p>查看判别分数与 Top-10 模型证据块，所有数据留在设备本地。</p></div><button id="export-button" class="secondary" disabled>↓ 导出报告</button></div>
+          <div id="detect-empty" class="empty-state"><div class="empty-symbol">▧</div><h2>等待导入待检图片</h2><p>使用 U 盘或本地文件选择器导入图片，选择模型后开始检测。<br>支持离线单张检测与批量任务。</p></div>
+          <div id="detect-results" hidden>
+            <div class="stats-strip"><div><span>当前模型</span><strong id="stat-model">—</strong></div><div><span>已完成</span><strong id="stat-finished">—</strong></div><div><span>检测吞吐量</span><strong id="stat-fps">—</strong></div><div><span>当前结果</span><strong id="stat-result">—</strong></div></div>
+            <div class="result-grid">
+              <section class="preview-card"><div class="card-title"><strong id="preview-title">模型证据对比</strong><span>左：模型输入　右：Top-10 Fake-support</span></div><div class="preview-holder"><img id="preview-image" alt="原始输入与局部证据可视化" loading="eager"></div><div class="preview-bottom"><span id="image-name">—</span><span id="image-pos">—</span></div></section>
+              <section class="decision-card"><div class="card-title"><strong>判别详情</strong><span>模型输出</span></div><div class="decision-main"><span class="captionlabel">判别结果</span><div id="decision-name" class="decision-name">—</div><p id="decision-desc">—</p></div><div class="metric"><span>Raw Logit</span><strong id="metric-logit">—</strong></div><div class="metric"><span>Fake-support sigmoid</span><strong id="metric-score">—</strong></div><div class="metric"><span>Top-10 最外圈 B1</span><strong id="metric-b1">—</strong></div><div class="note">说明：分数未经概率校准。证据框表示模型最高 Fake-support 区域，<b>不是</b>经人工标注的伪影掩码。</div></section>
+            </div>
+            <div class="list-title">本次任务图片 <span id="list-count"></span></div><div class="image-results" id="result-list"></div>
+          </div>
+        </section>
+        <section id="tab-history" class="screen"><div class="main-title-row"><div><div class="eyebrow">LOCAL RECORDS</div><h1>历史任务</h1><p>任务和证据图保存在 RK3588 本地存储。</p></div><button class="secondary" id="refresh-history">↻ 刷新</button></div><div class="history-list" id="history-list"></div></section>
+        <section id="tab-about" class="screen"><div class="main-title-row"><div><div class="eyebrow">DEVICE INFORMATION</div><h1>设备信息</h1><p>离线运行环境与实验边界</p></div></div><div class="about-cards"><div class="about-card"><span>计算平台</span><strong>iTOP-RK3588</strong><small>Ubuntu 22.04 / RKNN FP16</small></div><div class="about-card"><span>AI 推理</span><strong>Early-9 ViT</strong><small>R-BCE / R-Debias · 三核 NPU</small></div><div class="about-card"><span>运行方式</span><strong>完全本地</strong><small>127.0.0.1 · 无云端依赖</small></div><div class="about-card"><span>可视化</span><strong>14 × 14 Patches</strong><small>Top-10 假图支持区域（非真实伪影标注）</small></div></div><div class="about-detail">设备运行时无需网络连接。U 盘中的原始图片通过系统文件选择器导入；上传、推理与历史记录均保留在开发板本地。批量 FPS 不包含浏览器文件传输及模型首次加载时间。</div></section>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  </div>
+</body>
+</html>
